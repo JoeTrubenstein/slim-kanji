@@ -148,7 +148,7 @@
 						bind:value={context}
 					/>
 				</label>
-				<button class="btn-icon variant-filled mt-6" type="submit">例</button>
+				<button class="btn variant-filled mt-6" type="submit">generate examples</button>
 			</form>
 		</div>
 
