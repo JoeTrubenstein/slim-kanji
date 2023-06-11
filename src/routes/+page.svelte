@@ -15,7 +15,10 @@
 		loading = true;
 		error = false;
 		if (context.length > 1) {
+			error = true;
+			loading = false;
 			alert('please enter a single Kanji character');
+			return
 		}
 		answer = '';
 
