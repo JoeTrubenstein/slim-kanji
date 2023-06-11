@@ -47,6 +47,7 @@
 	},
 	"dependencies": {
 		"@prisma/client": "^4.15.0",
+		"@vercel/postgres": "^0.3.0",
 		"ts-node": "^10.9.1"
 	}
 }

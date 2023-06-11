@@ -1,9 +1,11 @@
 -- CreateTable
 CREATE TABLE "Character" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "id" SERIAL NOT NULL,
     "kanji" TEXT,
     "onyomi" TEXT,
     "kunyomi" TEXT,
     "jlpt" TEXT,
-    "meaning" TEXT
+    "meaning" TEXT,
+
+    CONSTRAINT "Character_pkey" PRIMARY KEY ("id")
 );

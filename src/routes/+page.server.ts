@@ -6,3 +6,9 @@ export const load: PageServerLoad = async () => {
         characters: await prisma.character.findMany({ take: 6 }),
     }
 }
+
+// export const completion = await openai.createCompletion({
+//     model: "text-davinci-003",
+//     prompt: generatePrompt(req.body.animal),
+//     temperature: 0.6,
+//   });
