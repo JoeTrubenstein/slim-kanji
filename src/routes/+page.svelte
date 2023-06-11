@@ -3,67 +3,65 @@
 	export let data: PageData;
 	$: ({ characters } = data);
 
-	import type { CreateCompletionResponse } from 'openai';
 	import { SSE } from 'sse.js';
+	import type { ChatCompletionRequestMessage } from 'openai'
+	import ChatMessage from '$lib/components/ChatMessage.svelte'
 
 	let context = '';
+	let query: string = ''
 	let loading = false;
 	let error = false;
 	let answer = '';
+	let chatMessages: ChatCompletionRequestMessage[] = []
 
 	const updateContext = async (char: string | null) => {
 		context = String(char);
 	};
 
 	const handleSubmit = async () => {
-		loading = true;
-		error = false;
-		if (context.length > 1) {
-			error = true;
-			loading = false;
-			alert('please enter a single Kanji character');
-			return;
-		}
-		answer = '';
+	
+		loading = true
+		chatMessages = [...chatMessages, { role: 'user', content: context }]
 
-		const eventSource = new SSE('/api/words', {
+		const eventSource = new SSE('/api/chat', {
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			payload: JSON.stringify({ context })
-		});
+			payload: JSON.stringify({ messages: chatMessages })
+		})
 
-		context = '';
+		query = ''
 
-		eventSource.addEventListener('error', (e) => {
-			error = true;
-			loading = false;
-			alert('Something went wrong!');
-		});
+		eventSource.addEventListener('error', handleError)
 
 		eventSource.addEventListener('message', (e) => {
 			try {
-				loading = false;
-
+				loading = false
 				if (e.data === '[DONE]') {
-					return;
+					chatMessages = [...chatMessages, { role: 'assistant', content: answer }]
+					answer = ''
+					return
 				}
 
-				const completionResponse: CreateCompletionResponse = JSON.parse(e.data);
+				const completionResponse = JSON.parse(e.data)
+				const [{ delta }] = completionResponse.choices
 
-				const [{ text }] = completionResponse.choices;
-
-				answer = (answer ?? '') + text;
+				if (delta.content) {
+					answer = (answer ?? '') + delta.content
+				}
 			} catch (err) {
-				error = true;
-				loading = false;
-				console.error(err);
-				alert('Something went wrong!');
+				handleError(err)
 			}
-		});
+		})
+		eventSource.stream()
+	}
 
-		eventSource.stream();
-	};
+	function handleError<T>(err: T) {
+		loading = false
+		query = ''
+		answer = ''
+		console.error(err)
+	}
 </script>
 
 <div class="container h-full mx-auto">
@@ -148,16 +146,24 @@
 						bind:value={context}
 					/>
 				</label>
-				<button class="btn variant-filled mt-6" type="submit">generate examples</button>
+				<button class="btn variant-filled mt-6" type="submit">generate</button>
 			</form>
 		</div>
 
 		<div class="p-2 container flex items-center justify-center">
 			<div class=" text-center card md:w-3/5 w-full p-4">
-				Examples will generate here:
-				{#if answer}
-					<p>{answer}</p>
-				{/if}
+				
+				{#each chatMessages as message}
+				<ChatMessage type={message.role} message={message.content} />
+			{/each}
+			{#if answer}
+				<ChatMessage type="assistant" message={answer} />
+				{:else}
+				<p>Examples will generate here:</p>
+			{/if}
+			{#if loading}
+				<ChatMessage type="assistant" message="Loading.." />
+			{/if}
 			</div>
 		</div>
 	</div>
