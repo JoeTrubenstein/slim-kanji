@@ -68,7 +68,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
 	} catch (err) {
         console.error(err)
-        throw new Error("500")
+        throw new Error("500 please refresh the page")
     }
 
 };
