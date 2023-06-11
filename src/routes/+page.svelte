@@ -9,14 +9,14 @@
 </script>
 
 <div class="container h-full mx-auto">
-	<h1 class="h1">Welcome to Slim Kanji.</h1>
+	<h1 class="h1 text-center mt-24">Welcome to Slim Kanji</h1>
 	<div class="container px-4 py-24 mx-auto">
 		<div class="flex flex-wrap p-4">
 
 			{#each characters as character}
-		    <div class="p-2 md:w-1/3 w-full overflow-hidden">
+		    <div class="p-2 md:w-1/3 w-full">
 
-				<div class="card w-full h-80 min-h-full overflow-hidden">
+				<div class="card w-full break-words">
 					
 			    <header class="card-header h1 flex items-center justify-center">{character.kanji}</header>
 
