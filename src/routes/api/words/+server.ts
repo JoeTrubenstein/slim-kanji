@@ -3,6 +3,11 @@ import { OAI_KEY } from '$env/static/private';
 import type { RequestHandler } from './$types';
 import { oneLine, stripIndent } from 'common-tags';
 import type { CreateCompletionRequest } from 'openai'
+import type { Config } from '@sveltejs/kit';
+
+export const config: Config = {
+    runtime: 'edge'
+}
 
 export const POST: RequestHandler = async ({ request }) => {
 	try {

@@ -63,7 +63,6 @@
 	<h1 class="h1 text-center mt-12">Slim Kanji</h1>
 
 	<p class="p text-center mt-12">Slim Kanji</p>
-
 	<div class="container flex items-center justify-center">
 		<form action="?/reloadKanji" method="POST">
 			<button class="btn-icon variant-filled mt-6" type="submit">新</button>
