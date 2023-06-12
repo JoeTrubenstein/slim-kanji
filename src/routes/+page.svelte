@@ -82,7 +82,7 @@
 <div id="card-deck" class="container h-full mx-auto">
 	<div class="container flex items-center justify-center">
 		<form action="?/reloadKanji" method="POST">
-			<button class="btn variant-filled mt-12" type="submit">give me three more Kanji</button>
+			<button class="btn variant-filled mt-12 rounded-lg" type="submit">give me three more Kanji</button>
 		</form>
 	</div>
 
@@ -113,7 +113,7 @@
 						<hr class="opacity-50" />
 						<footer class="p-4 flex justify-start items-center space-x-4">
 							<div class="flex-auto flex justify-between items-center">
-								<button class="btn variant-filled" on:click={() => updateContext(character.kanji)}
+								<button class="btn variant-filled rounded-lg" on:click={() => updateContext(character.kanji)}
 									>add to generator</button
 								>
 								<!-- <small>On {new Date().toLocaleDateString()}</small> -->
@@ -136,7 +136,7 @@
 						bind:value={context}
 					/>
 				</label>
-				<button class="btn variant-filled mt-6" type="submit">generate</button>
+				<button class="btn variant-filled mt-6 rounded-lg" type="submit">generate</button>
 			</form>
 		</div>
 

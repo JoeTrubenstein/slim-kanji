@@ -11,14 +11,14 @@
 		<!-- <DocsLogoHero /> -->
 		<h1 class="!text-5xl md:!text-6xl max-w-[600px]">AI-powered Tools for Learning Japanese</h1>
 		<p class="!text-xl max-w-[475px]">
-			Skeleton allows you to create and accessible interfaces for web apps of any shape or size.
+			SvelteKit + Prisma + OpenAI
 		</p>
 		<div class="flex gap-4">
-			<a href="#card-deck" class="btn variant-filled">
+			<a href="#card-deck" class="btn variant-filled rounded-lg">
 				<span>Get Started</span>
 				<i class="fa-solid fa-arrow-right-long" />
 			</a>
-			<a href="https://github.com/JoeTrubenstein/slim-kanji" class="btn variant-filled">Source Code</a>
+			<a href="https://github.com/JoeTrubenstein/slim-kanji" class="btn variant-filled rounded-lg">Source Code</a>
 		</div>
 	</div>
 
