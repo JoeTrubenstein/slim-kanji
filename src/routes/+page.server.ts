@@ -5,16 +5,23 @@ import { fail } from '@sveltejs/kit';
 function getRandomInt(min: number, max: number) {
 	min = Math.ceil(min);
 	max = Math.floor(max);
-	return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive skip: getRandomInt(1, 6000),
+	return Math.floor(Math.random() * (max - min) + min);
 }
 
 export const load: PageServerLoad = async () => {
 	return {
-		characters: await prisma.character.findMany({where: {jlpt: {contains: "N"}}, skip:getRandomInt(1, 200), take: 3 })
+		characters: await prisma.character.findMany({where: {jlpt: {contains: "N"}}, skip:getRandomInt(1, 200), take: 25 })
 	};
 };
 
+const newKanji = async () => {
+	return {
+		characters: await prisma.character.findMany({where: {jlpt: {contains: "N"}}, skip: getRandomInt(1, 200), take: 3 })
+	};
+}
+
 export const actions: Actions = {
+
 	reloadKanji: async () => {
 		return {
 			characters: await prisma.character.findMany({where: {jlpt: {contains: "N"}}, skip: getRandomInt(1, 200), take: 3 })

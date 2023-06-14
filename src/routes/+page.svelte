@@ -9,11 +9,20 @@
 	import { SSE } from 'sse.js';
 	import type { ChatCompletionRequestMessage } from 'openai';
 	import ChatMessage from '$lib/components/ChatMessage.svelte';
-	import { Avatar } from '@skeletonlabs/skeleton';
 	import { TabGroup, Tab } from '@skeletonlabs/skeleton';
-	import logo from '$lib/assets/skelly.png';
+
+	function getRandomInt(min: number, max: number) {
+		min = Math.ceil(min);
+		max = Math.floor(max);
+		return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive skip: getRandomInt(1, 6000),
+	}
 
 	let tabSet: number = 0;
+	let currentKanji: number = getRandomInt(0, 24);
+
+	function shuffleKanji() {
+		currentKanji = getRandomInt(0, 24);
+	}
 
 	let context = '';
 	let loading = false;
@@ -34,6 +43,8 @@
 	}
 
 	const updateContext = async (char: string | null) => {
+		answer = '';
+		tabSet = 2;
 		context = String(char);
 		try {
 			await handleSubmit();
@@ -44,6 +55,7 @@
 
 	//  Send the selected Kanji to Chat GPT as context in the user role message
 	const handleSubmit = async () => {
+
 		loading = true;
 		chatMessages = [...chatMessages, { role: 'user', content: context }];
 
@@ -61,7 +73,6 @@
 				loading = false;
 				if (e.data === '[DONE]') {
 					chatMessages = [...chatMessages, { role: 'assistant', content: answer }];
-					answer = '';
 					return;
 				}
 
@@ -88,8 +99,8 @@
 
 <Hero kanjis={characters} />
 
-<section class="">
-	<div class="container px-5 pt-24 mx-auto flex flex-wrap">
+<section id="explainer" class="">
+	<div class="container px-5 py-24 mx-auto flex flex-wrap">
 		<div class="flex flex-wrap w-full">
 			<div class="lg:w-3/5 md:w-1/2 md:pr-10 md:py-6">
 				<div class="flex relative pb-12">
@@ -151,12 +162,12 @@
 							<div
 								class="bg-black/10 w-full aspect-[16/9] h-32 max-h-32 flex items-center justify-center"
 							>
-								<p class="text-7xl">{characters[0].kanji}</p>
+								<p class="text-7xl">{characters[currentKanji].kanji}</p>
 							</div>
 							<!-- <img src="https://source.unsplash.com/vjUokUWbFOs/400x175" class="bg-black/50 w-full aspect-[21/9]" alt="Post" /> -->
 						</header>
-						<div class="p-4 space-y-4 h-48 min-h-48 break-words">
-							<h6 class="h6">{characters[0].jlpt}</h6>
+						<div class="p-4 space-y-4 h-72 min-h-72 break-words">
+							<h6 class="h6">{characters[currentKanji].jlpt}</h6>
 							<article>
 								<TabGroup>
 									<Tab bind:group={tabSet} name="tab1" value={0}>Meanings</Tab>
@@ -167,14 +178,38 @@
 										{#if tabSet === 0}
 											<article>
 												{#if characters[0].meaning}
-													{characters[0].meaning.replaceAll(';', ', ')}
+													{characters[currentKanji].meaning?.replaceAll(';', ', ')}
 												{/if}
 											</article>
 										{:else if tabSet === 1}
-											<p>Onyomi: {characters[0].onyomi}</p>
-											<p>Kunyomi: {characters[0].kunyomi}</p>
+											<p>Onyomi: {characters[currentKanji].onyomi}</p>
+											<p>Kunyomi: {characters[currentKanji].kunyomi}</p>
 										{:else if tabSet === 2}
-											Ask AI to generate practical applications of a given Kanji
+										<div>
+											<label class="label">
+
+												<textarea
+													required
+													class="w-full h-36 textarea"
+													placeholder="Ask AI for help with example vocabulary"
+													name="context"
+													bind:value={answer}
+												/>
+
+											</label>
+											
+											{#each chatMessages as message}
+												<!-- <ChatMessage type={message.role} message={message.content} /> -->
+											{/each}
+											{#if answer}
+											<!-- <div>
+												<ChatMessage type="assistant" message={answer} />
+											</div> -->
+											{/if}
+											{#if loading}
+												<ChatMessage type="assistant" message="Loading.." />
+											{/if}
+										</div>
 										{/if}
 									</svelte:fragment>
 								</TabGroup>
@@ -182,12 +217,18 @@
 						</div>
 						<hr class="opacity-50" />
 						<footer class="p-4 flex justify-start items-center space-x-4">
-							<div class="flex-auto flex justify-between items-center">
+							<div class="flex-auto flex items-center">
 								<button
 									class="btn variant-filled rounded-lg"
-									on:click={() => updateContext(characters[0].kanji)}>Ask AI</button
+									on:click={() => updateContext(characters[currentKanji].kanji)}>Ask AI</button
 								>
 								<!-- <small>On {new Date().toLocaleDateString()}</small> -->
+						
+									<button 
+									on:click={() => shuffleKanji()}
+									class="btn variant-filled rounded-lg ml-4" type="submit">New Kanji</button
+									>
+								
 							</div>
 						</footer>
 					</div>
@@ -214,6 +255,7 @@
 	</form>
 </div> -->
 
+<!-- 
 <div class="p-2 container flex items-center justify-center">
 	<div class=" text-center card md:w-3/5 w-full p-4">
 		<div class="grid grid-cols-[auto_1fr] gap-2">
@@ -221,7 +263,7 @@
 			<div class="card p-4 variant-soft rounded-tl-none space-y-2">
 				<header class="flex justify-between items-center">
 					<p class="font-bold">AI Assistant</p>
-					<!-- <small>On {new Date().toLocaleDateString()}</small> -->
+			
 				</header>
 				{#each chatMessages as message}
 					<ChatMessage type={message.role} message={message.content} />
@@ -239,4 +281,4 @@
 			</div>
 		</div>
 	</div>
-</div>
+</div> -->

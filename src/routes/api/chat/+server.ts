@@ -57,7 +57,7 @@ export const POST: RequestHandler = async ({ request }) => {
 		}
 
 		const prompt =
-			'Give 3 examples of words where the provided Kanji appears. Include Kanji, romaji, hiragana, and English translations.'
+			'Give 3 examples of words where the provided Kanji appears. Format each example to show Kanji, romaji, and English.'
 		tokenCount += getTokens(prompt)
 
 		if (tokenCount >= 250) {

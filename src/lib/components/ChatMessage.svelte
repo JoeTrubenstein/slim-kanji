@@ -6,7 +6,7 @@
 
 <div class="chat {type === 'user' ? 'chat-end' : 'chat-start'} justify-end">
 	<div class="chat-header">
-		{type === 'user' ? 'Example vocabulary for the selected Kanji' : ' '}
+		{type === 'user' ? '' : ''}
 	</div>
 	<div class="chat-bubble {type === 'user' ? 'chat-bubble-primary' : 'chat-bubble-secondary'}">
 		{message}

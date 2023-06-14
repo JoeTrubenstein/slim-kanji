@@ -14,7 +14,7 @@
 			SvelteKit + Prisma + OpenAI
 		</p>
 		<div class="flex gap-4">
-			<a href="#card-deck" class="btn variant-filled rounded-lg">
+			<a href="#explainer" class="btn variant-filled rounded-lg">
 				<span>Get Started</span>
 				<i class="fa-solid fa-arrow-right-long" />
 			</a>
