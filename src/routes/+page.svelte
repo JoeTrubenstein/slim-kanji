@@ -29,18 +29,7 @@
 	let error = false;
 	let answer = '';
 	let chatMessages: ChatCompletionRequestMessage[] = [];
-	let currentDateTime = new Date();
 
-	// Create Timestamps for AI Responses
-	function getHour(c: Date) {
-		return c.getHours() % 12 || 12;
-	}
-	function getMinute(c: Date) {
-		return c.getMinutes() < 10 ? '0' + c.getMinutes() : c.getMinutes();
-	}
-	function getMeridiem(c: Date) {
-		return c.getHours() < 12 ? 'AM' : 'PM';
-	}
 
 	const updateContext = async (char: string | null) => {
 		answer = '';

@@ -30,7 +30,7 @@ export const POST: RequestHandler = async ({ request }) => {
 		let tokenCount = 0
 
 		reqMessages.forEach((msg) => {
-			const tokens = getTokens(msg.content)
+			const tokens = getTokens(msg.content ?? "no message")
 			tokenCount += tokens
 		})
 
@@ -97,7 +97,7 @@ export const POST: RequestHandler = async ({ request }) => {
 		})
 	} catch (err) {
 		console.error(err)
-		alert("Oops! Looks like we overloaded OpenAi... Try back in a few minutes!")
+		alert("Oops! Looks like we overloaded OpenAi... Try back in a few minutes.")
 		return json({ error: 'There was an error processing your request' }, { status: 500 })
 	}
 }
