@@ -15,7 +15,7 @@
 		<!-- App Bar -->
 		<AppBar>
 			<svelte:fragment slot="lead">
-				<strong class="text-xl uppercase">Slim Kanji</strong>
+				<strong class="text-xl uppercase">Toruben</strong>
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
 				<LightSwitch/>

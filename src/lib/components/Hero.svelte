@@ -4,7 +4,7 @@
     export let kanjis: any[];
 </script>
 
-<div class="container py-12 mx-auto">
+<div class="container px-4 py-12 mx-auto">
 <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-10 items-center">
 	<!-- Info -->
 	<div class="flex flex-col items-center xl:items-start text-center xl:text-left space-y-4">
