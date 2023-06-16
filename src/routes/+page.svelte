@@ -4,17 +4,21 @@
 	export let data: PageData;
 	$: ({ characters } = data);
 
+	
 	import Hero from '$lib/components/Hero.svelte';
 
-	import { SSE } from 'sse.js';
-	import type { ChatCompletionRequestMessage } from 'openai';
 	import ChatMessage from '$lib/components/ChatMessage.svelte';
-	import { TabGroup, Tab } from '@skeletonlabs/skeleton';
+	import { Tab, TabGroup } from '@skeletonlabs/skeleton';
+	import type { ChatCompletionRequestMessage } from 'openai';
+	import { SSE } from 'sse.js';
+
+	import { firebaseAuth } from '$lib/firebase';
+	import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 	function getRandomInt(min: number, max: number) {
 		min = Math.ceil(min);
 		max = Math.floor(max);
-		return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive skip: getRandomInt(1, 6000),
+		return Math.floor(Math.random() * (max - min) + min);
 	}
 
 	let tabSet: number = 0;
@@ -30,6 +34,10 @@
 	let answer = '';
 	let chatMessages: ChatCompletionRequestMessage[] = [];
 
+	let email: string;
+	let password: string;
+
+	let success: boolean | undefined = undefined;
 
 	const updateContext = async (char: string | null) => {
 		answer = '';
@@ -44,7 +52,6 @@
 
 	//  Send the selected Kanji to Chat GPT as context in the user role message
 	const handleSubmit = async () => {
-
 		loading = true;
 		chatMessages = [...chatMessages, { role: 'user', content: context }];
 
@@ -78,6 +85,20 @@
 		eventSource.stream();
 	};
 	//
+
+	const register = () => {
+		createUserWithEmailAndPassword(firebaseAuth, email, password)
+			.then((userCredentials) => {
+				console.log(userCredentials)
+			})
+			.catch((error) => {
+				const errorCode = error.code;
+				const errorMessage = error.message;
+				console.log(errorCode, errorMessage);
+
+				success = false;
+			});
+	};
 
 	function handleError<T>(err: T) {
 		loading = false;
@@ -174,31 +195,29 @@
 											<p>Onyomi: {characters[currentKanji].onyomi}</p>
 											<p>Kunyomi: {characters[currentKanji].kunyomi}</p>
 										{:else if tabSet === 2}
-										<div>
-											<label class="label">
+											<div>
+												<label class="label">
+													<textarea
+														required
+														class="w-full h-36 textarea"
+														placeholder="Ask AI for help with example vocabulary"
+														name="context"
+														bind:value={answer}
+													/>
+												</label>
 
-												<textarea
-													required
-													class="w-full h-36 textarea"
-													placeholder="Ask AI for help with example vocabulary"
-													name="context"
-													bind:value={answer}
-												/>
-
-											</label>
-											
-											{#each chatMessages as message}
-												<!-- <ChatMessage type={message.role} message={message.content} /> -->
-											{/each}
-											{#if answer}
-											<!-- <div>
+												{#each chatMessages as message}
+													<!-- <ChatMessage type={message.role} message={message.content} /> -->
+												{/each}
+												{#if answer}
+													<!-- <div>
 												<ChatMessage type="assistant" message={answer} />
 											</div> -->
-											{/if}
-											{#if loading}
-												<ChatMessage type="assistant" message="Loading.." />
-											{/if}
-										</div>
+												{/if}
+												{#if loading}
+													<ChatMessage type="assistant" message="Loading.." />
+												{/if}
+											</div>
 										{/if}
 									</svelte:fragment>
 								</TabGroup>
@@ -212,12 +231,12 @@
 									on:click={() => updateContext(characters[currentKanji].kanji)}>Ask AI</button
 								>
 								<!-- <small>On {new Date().toLocaleDateString()}</small> -->
-						
-									<button 
+
+								<button
 									on:click={() => shuffleKanji()}
-									class="btn variant-filled rounded-lg ml-4" type="submit">New Kanji</button
-									>
-								
+									class="btn variant-filled rounded-lg ml-4"
+									type="submit">New Kanji</button
+								>
 							</div>
 						</footer>
 					</div>
@@ -227,47 +246,24 @@
 	</div>
 </section>
 
-<!-- <div class="container flex items-center justify-center">
-	<form class="md:w-1/3 w-full p-4 text-center" on:submit|preventDefault={() => handleSubmit()}>
-		<p class="mb-2">Enter a Kanji to see example words</p>
-		<label class="label">
-			<input
-				required
-				class="input mt-4"
-				type="text"
-				placeholder="click one of the above or type your own"
-				name="context"
-				bind:value={context}
-			/>
-		</label>
-		<button class="btn variant-filled mt-6 rounded-lg" type="submit">generate</button>
-	</form>
-</div> -->
+<form
+	class="flex flex-col gap-4 p-8 space-y-4 bg-white sm:w-10/12"
+	on:submit|preventDefault={register}
+>
+	<input
+		type="email"
+		placeholder="Email"
+		class="px-4 py-2 border border-gray-300 rounded-md"
+		required
+		bind:value={email}
+	/>
+	<input
+		type="password"
+		placeholder="Password"
+		class="px-4 py-2 border border-gray-300 rounded-md"
+		required
+		bind:value={password}
+	/>
 
-<!-- 
-<div class="p-2 container flex items-center justify-center">
-	<div class=" text-center card md:w-3/5 w-full p-4">
-		<div class="grid grid-cols-[auto_1fr] gap-2">
-			<Avatar src={logo} width="w-12" />
-			<div class="card p-4 variant-soft rounded-tl-none space-y-2">
-				<header class="flex justify-between items-center">
-					<p class="font-bold">AI Assistant</p>
-			
-				</header>
-				{#each chatMessages as message}
-					<ChatMessage type={message.role} message={message.content} />
-				{/each}
-				{#if answer}
-					<small class="opacity-50"
-						>{getHour(currentDateTime)}:
-						{getMinute(currentDateTime)}{getMeridiem(currentDateTime)}
-					</small>
-					<ChatMessage type="assistant" message={answer} />
-				{/if}
-				{#if loading}
-					<ChatMessage type="assistant" message="Loading.." />
-				{/if}
-			</div>
-		</div>
-	</div>
-</div> -->
+	<button type="submit" class="default-action">Register</button>
+</form>

@@ -14,19 +14,7 @@ export const load: PageServerLoad = async () => {
 	};
 };
 
-const newKanji = async () => {
-	return {
-		characters: await prisma.character.findMany({where: {jlpt: {contains: "N"}}, skip: getRandomInt(1, 200), take: 3 })
-	};
-}
-
 export const actions: Actions = {
-
-	reloadKanji: async () => {
-		return {
-			characters: await prisma.character.findMany({where: {jlpt: {contains: "N"}}, skip: getRandomInt(1, 200), take: 3 })
-		};
-	},
 
 	createCharacter: async ({ request }) => {
 		const { kanji, jlpt, onyomi, kunyomi, meaning } = Object.fromEntries(

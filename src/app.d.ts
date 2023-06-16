@@ -12,7 +12,6 @@ declare global {
 	// interface Error {}
 	// interface Platform {}
 	}
-
 	var prisma: PrismaClient
 }
 
