@@ -1,5 +1,4 @@
 <script lang="ts">
-	// import DocsLogoHero from '$lib/components/DocsLogos/DocsLogoHero.svelte';
 	import HomeHeroComponents from './HomeHeroComponents.svelte';
     export let kanjis: any[];
 </script>
@@ -11,7 +10,7 @@
 		<!-- <DocsLogoHero /> -->
 		<h1 class="!text-5xl md:!text-6xl max-w-[600px]">AI-powered Tools for Learning Japanese</h1>
 		<p class="!text-xl max-w-[475px]">
-			SvelteKit + Prisma + OpenAI
+		 Supercharge your study routine with the world's most powerful public AI models
 		</p>
 		<div class="flex gap-4">
 			<a href="#explainer" class="btn variant-filled rounded-lg">

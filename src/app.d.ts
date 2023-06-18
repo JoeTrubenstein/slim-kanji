@@ -6,8 +6,15 @@ declare global {
 // for information about these interfaces
 // and what to do when importing types
 
+type User = {
+	uid: string
+	email: string
+}
+
 	namespace App {
-	// interface Locals {}
+	interface Locals {
+		user: User | null
+	}
 	// interface PageData {}
 	// interface Error {}
 	// interface Platform {}

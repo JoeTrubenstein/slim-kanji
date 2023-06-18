@@ -1,19 +1,15 @@
 <script lang="ts">
-	import { Avatar, ProgressRadial, RadioGroup, RadioItem, SlideToggle, LightSwitch } from '@skeletonlabs/skeleton';
-
-	// Local
-	let value = 0;
-	let demoSlideToggle = true;
-    export let kanjis: any[];
-    import logo from '$lib/assets/skelly.png';
+	import logo from '$lib/assets/toru.png';
+	import { Avatar } from '@skeletonlabs/skeleton';
+	export let kanjis: any[];
 </script>
 
 <!-- variant-ringed-error -->
 <div class="aspect-video relative">
 
     	<!-- Avatar -->
-	<div class="anim-float-avatar absolute z-[1] top-[32%] left-[40%]">
-		<Avatar src="https://source.unsplash.com/9Ev3ctTEaWA/128x128" width="w-32" shadow="shadow-xl" />
+	<div class="anim-float-avatar absolute z-[1] top-[27%] left-[37%]">
+		<Avatar src={logo} width="w-40" shadow="shadow-xl" />
 	</div>
 
 

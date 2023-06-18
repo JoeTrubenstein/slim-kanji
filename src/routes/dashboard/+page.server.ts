@@ -2,35 +2,40 @@ import { prisma } from '$lib/server/prisma';
 import { fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
-import type { ModalSettings } from '@skeletonlabs/skeleton';
-import { modalStore } from '@skeletonlabs/skeleton';
-
-
 function getRandomInt(min: number, max: number) {
 	min = Math.ceil(min);
 	max = Math.floor(max);
 	return Math.floor(Math.random() * (max - min) + min);
 }
+export const load: PageServerLoad = async ({locals}) => {
+	console.log(locals.user)
+	// const unsubscribe = authUser.subscribe((user) => {
+	// 	if (!user) {
+	// 	  throw redirect(302, '/login');
+	// 	}
+	//   });
 
-export const load: PageServerLoad = async () => {
+	//   unsubscribe();
+
 	return {
-		characters: await prisma.character.findMany({where: {jlpt: {contains: "N"}}, skip:getRandomInt(1, 200), take: 25 }),
+		characters: await prisma.character.findMany({
+			where: { jlpt: { contains: 'N' } },
+			skip: getRandomInt(1, 1000),
+			take: 3
+		}),
 	};
 };
 
-function modalReg(): void {
-	const modal: ModalSettings = {
-		type: 'alert',
-		title: 'Success!',
-		body: `Account created for ${" "}`,
-		image: 'https://i.imgur.com/TykCy5e.gif',
-		buttonTextCancel: "Go back"
-		// image: 'https://i.imgur.com/WOgTG96.gif'
-	};
-	modalStore.trigger(modal);
-}
-
 export const actions: Actions = {
+	reloadKanji: async () => {
+		return {
+			characters: await prisma.character.findMany({
+				where: { jlpt: { contains: 'N' } },
+				skip: getRandomInt(1, 1000),
+				take: 3
+			})
+		};
+	},
 
 	createCharacter: async ({ request }) => {
 		const { kanji, jlpt, onyomi, kunyomi, meaning } = Object.fromEntries(

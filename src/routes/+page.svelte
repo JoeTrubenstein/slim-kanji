@@ -2,18 +2,16 @@
 	import type { PageData } from './$types';
 
 	export let data: PageData;
+
 	$: ({ characters } = data);
 
-	
 	import Hero from '$lib/components/Hero.svelte';
 
 	import ChatMessage from '$lib/components/ChatMessage.svelte';
+	// import Signup from '$lib/components/Signup.svelte';
 	import { Tab, TabGroup } from '@skeletonlabs/skeleton';
 	import type { ChatCompletionRequestMessage } from 'openai';
 	import { SSE } from 'sse.js';
-
-	import { firebaseAuth } from '$lib/firebase';
-	import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 	function getRandomInt(min: number, max: number) {
 		min = Math.ceil(min);
@@ -33,11 +31,6 @@
 	let error = false;
 	let answer = '';
 	let chatMessages: ChatCompletionRequestMessage[] = [];
-
-	let email: string;
-	let password: string;
-
-	let success: boolean | undefined = undefined;
 
 	const updateContext = async (char: string | null) => {
 		answer = '';
@@ -86,20 +79,6 @@
 	};
 	//
 
-	const register = () => {
-		createUserWithEmailAndPassword(firebaseAuth, email, password)
-			.then((userCredentials) => {
-				console.log(userCredentials)
-			})
-			.catch((error) => {
-				const errorCode = error.code;
-				const errorMessage = error.message;
-				console.log(errorCode, errorMessage);
-
-				success = false;
-			});
-	};
-
 	function handleError<T>(err: T) {
 		loading = false;
 		answer = '';
@@ -107,10 +86,12 @@
 	}
 </script>
 
+<!-- <SuperDebug data={$form} /> -->
+
 <Hero kanjis={characters} />
 
 <section id="explainer" class="">
-	<div class="container px-5 py-24 mx-auto flex flex-wrap">
+	<div class="container px-5 pt-24 mx-auto flex flex-wrap mb-24">
 		<div class="flex flex-wrap w-full">
 			<div class="lg:w-3/5 md:w-1/2 md:pr-10 md:py-6">
 				<div class="flex relative pb-12">
@@ -246,24 +227,4 @@
 	</div>
 </section>
 
-<form
-	class="flex flex-col gap-4 p-8 space-y-4 bg-white sm:w-10/12"
-	on:submit|preventDefault={register}
->
-	<input
-		type="email"
-		placeholder="Email"
-		class="px-4 py-2 border border-gray-300 rounded-md"
-		required
-		bind:value={email}
-	/>
-	<input
-		type="password"
-		placeholder="Password"
-		class="px-4 py-2 border border-gray-300 rounded-md"
-		required
-		bind:value={password}
-	/>
-
-	<button type="submit" class="default-action">Register</button>
-</form>
+<!-- <Signup /> -->
