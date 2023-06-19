@@ -5,17 +5,19 @@
 	import '@skeletonlabs/skeleton/styles/skeleton.css';
 	// Most of your app wide CSS should be put in this file
 	import { AppBar, AppShell, LightSwitch, Modal } from '@skeletonlabs/skeleton';
+	import { get } from 'svelte/store';
+	
 	import '../app.postcss';
 
 	import { onMount } from 'svelte';
 	import { firebaseAuth } from '$lib/firebase';
-
-	let currentUserEmail: string | null;
-	let currentUserUid: string | null;
-
+	import { userEmail, userId } from '$lib/store';
+	
 	const handleLogout = () => {
     firebaseAuth.signOut()
 	.then(()=>{
+		userEmail.set("none");
+		userId.set("none");
 		console.log("signed out")
       })
       .catch((error) => {
@@ -30,8 +32,9 @@
 				// https://firebase.google.com/docs/reference/js/auth.user
 				const uid = user.uid;
 				const email =user.email
-				currentUserEmail = email;
-				currentUserUid = uid;
+				userId.set(uid || "cant set uid");
+				userEmail.set(email || "cant set email");
+				console.log(get(userEmail))
 				// ...
 			} else {
 				console.log('no user');
@@ -53,8 +56,8 @@
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
 				<!-- links -->
-				{#if currentUserEmail}
-				<small class="pl-4px">{currentUserEmail}</small>
+				{#if $userEmail !== "none"}
+				<small class="pl-4px">{get(userEmail)}</small>
 				<button class="btn" on:click={handleLogout}>Logout</button>
 				{/if}
 				<LightSwitch />

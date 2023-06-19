@@ -7,14 +7,18 @@ declare global {
 // and what to do when importing types
 
 type User = {
-	uid: string
+	id: number
 	email: string
+	role: string
 }
 
+
 	namespace App {
-	interface Locals {
-		user: User | null
-	}
+
+		interface Locals {
+			user: User | null
+		}
+
 	// interface PageData {}
 	// interface Error {}
 	// interface Platform {}

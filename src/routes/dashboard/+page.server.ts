@@ -7,8 +7,7 @@ function getRandomInt(min: number, max: number) {
 	max = Math.floor(max);
 	return Math.floor(Math.random() * (max - min) + min);
 }
-export const load: PageServerLoad = async ({locals}) => {
-	console.log(locals.user)
+export const load: PageServerLoad = async () => {
 	// const unsubscribe = authUser.subscribe((user) => {
 	// 	if (!user) {
 	// 	  throw redirect(302, '/login');
