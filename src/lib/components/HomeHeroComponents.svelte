@@ -8,7 +8,7 @@
 <div class="aspect-video relative">
 
     	<!-- Avatar -->
-	<div class="anim-float-avatar absolute z-[1] top-[27%] left-[37%]">
+	<div class="anim-float-avatar absolute z-[1] top-[27%] left-[36%]">
 		<Avatar src={logo} width="w-40" shadow="shadow-xl" />
 	</div>
 

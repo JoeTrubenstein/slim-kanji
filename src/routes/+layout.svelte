@@ -12,6 +12,9 @@
 	import { onMount } from 'svelte';
 	import { firebaseAuth } from '$lib/firebase';
 	import { userEmail, userId } from '$lib/store';
+	import Navigation from '$lib/components/Navigation.svelte';
+	import { Drawer, drawerStore } from '@skeletonlabs/skeleton';
+	import type { DrawerSettings } from '@skeletonlabs/skeleton';
 	
 	const handleLogout = () => {
     firebaseAuth.signOut()
@@ -43,27 +46,58 @@
 			}
 		});
 	});
+
+
+
+const drawerSettings: DrawerSettings = {
+	id: 'example-2',
+	meta: { foo: 'bar', fizz: 'buzz', age: 40 },
+	width: 'w-[280px] md:w-[480px]'
+};
+
+function drawerOpen(): void {
+	drawerStore.open(drawerSettings);
+}
+
+
 </script>
 
 <!-- App Shell -->
 <Modal />
-<AppShell>
+
+<Drawer>
+	<Navigation />
+</Drawer>
+
+<AppShell slotSidebarLeft="bg-surface-500/5 w-0 lg:w-48">
 	<svelte:fragment slot="header">
 		<!-- App Bar -->
 		<AppBar>
 			<svelte:fragment slot="lead">
-				<strong class="text-xl uppercase">Toruben</strong>
+				<div class="flex items-center">
+					<button class="lg:hidden btn btn-sm mr-4" on:click={drawerOpen}>
+						<span>
+							<svg viewBox="0 0 100 80" class="fill-token w-4 h-4">
+								<rect width="100" height="20" />
+								<rect y="30" width="100" height="20" />
+								<rect y="60" width="100" height="20" />
+							</svg>
+						</span>
+					</button>
+					<strong class="text-xl uppercase">Toruben</strong>
+				</div>
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
-				<!-- links -->
-				{#if $userEmail !== "none"}
-				<small class="pl-4px">{get(userEmail)}</small>
-				<button class="btn" on:click={handleLogout}>Logout</button>
-				{/if}
 				<LightSwitch />
 			</svelte:fragment>
 		</AppBar>
 	</svelte:fragment>
+
+		<!-- Left Sidebar Slot -->
+		<svelte:fragment slot="sidebarLeft">
+			<Navigation />
+		</svelte:fragment>
+
 	<!-- Page Route Content -->
 	<slot />
 </AppShell>
