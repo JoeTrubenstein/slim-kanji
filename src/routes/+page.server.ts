@@ -13,6 +13,7 @@ function getRandomInt(min: number, max: number) {
 }
 
 export const load: PageServerLoad = async ({locals}) => {
+	
 	return {
 		characters: await prisma.character.findMany({where: {jlpt: {contains: "N"}}, skip:getRandomInt(1, 200), take: 25 }),
 	};

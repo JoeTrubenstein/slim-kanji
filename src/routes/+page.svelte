@@ -11,8 +11,13 @@
 </script>
 
 <!-- <SuperDebug data={$form} /> -->
-
+{#if characters[0].kanji}
 <Hero kanjis={characters} />
 <Explainer characters={characters} />
+{/if}
+
+{#if !characters[0].kanji}
+<p>loading</p>
+{/if}
 
 <!-- <Signup /> -->
